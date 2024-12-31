@@ -45,6 +45,7 @@ services:
       COOKIE_CLOUD_UUID: 'rsshub'
       COOKIE_CLOUD_PASSWORD: 'rsshub-pwd'
       COOKIE_CLOUD_INTERVAL: 3600
+    command: ["npm", "run", "dev"]
   cookiecloud:
     image: easychen/cookiecloud:2023.01.20.16.39
     user: 1000:1001
