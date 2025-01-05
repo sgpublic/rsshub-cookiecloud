@@ -73,8 +73,12 @@ const cloudCookie = async (host: string, uuid: string, password: string) => {
             }
         }
     }
-    setConfig(newEnvs);
-    logger.debug('[CookieCloud] update success.');
+    if (Object.keys(newEnvs).length > 0) {
+        setConfig(newEnvs);
+        logger.info('[CookieCloud] update success.');
+    } else {
+        logger.debug('[CookieCloud] nothing to update.');
+    }
 };
 
 const cookieDecrypt = (uuid: string, encrypted: string, password: string) => {
