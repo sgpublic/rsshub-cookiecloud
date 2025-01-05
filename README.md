@@ -4,7 +4,7 @@
 
 这个仓库用于解决某些网站 cookie 过期时间过短而 rsshub 更新 cookie 不太方便的问题。
 
-**注意：此仓库暂未包含所有 cookie 同步方法，若您希望添加新的同步方法，请修改 [cookiecloud/cookies.ts](/cookiecloud/cookies.ts) 并创建 PR。**
+**注意：此仓库暂未包含所有 cookie 同步方法，若您愿意贡献新的同步方法，请仿照 [cookiecloud/cookies](/cookiecloud/cookies) 目录中 JSON 文件的格式，添加新的 JSON 文件并创建 PR。**
 
 ### 原理
 
@@ -24,6 +24,7 @@
    | COOKIE_CLOUD_UUID | 用户KEY · UUID | uuid |  |
    | COOKIE_CLOUD_PASSWORD | 端对端加密密码 | password |  |
    | COOKIE_CLOUD_INTERVAL | 更新间隔时间（单位：秒） | 3600 | 3600 |
+   | COOKIE_CLOUD_DEBUG | 设置为 true 时将允许路由 `/cookiecloud/:keys?` 返回配置值 | true | false |
 4. 修改启动命令为 `npm run dev`。
 5. 日志中出现了 `info: CookieCloud loaded.` 即为加载成功。
 

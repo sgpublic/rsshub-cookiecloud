@@ -24,6 +24,8 @@ interface DecryptedData {
     local_storage_data: Record<string, any>;
 }
 
+const _envs = process.env;
+
 const cloudCookie = async (host: string, uuid: string, password: string) => {
     let cookies: CookieItem[] = [];
     try {
@@ -52,30 +54,36 @@ const cloudCookie = async (host: string, uuid: string, password: string) => {
     }
 
     const newEnvs = {};
-    for (const [key, queryList] of cookieMap) {
+    for (const key in cookieMap) {
+        const queryList = cookieMap[key];
         for (const query of queryList) {
             let result: string | undefined;
-            for (const cookieCloudItem of cookies || []) {
-                if (cookieCloudItem.domain === query.domain && query.path !== undefined && cookieCloudItem.path === query.path) {
-                    if (query.name === undefined) {
-                        result = (result || '') + `${cookieCloudItem.name}=${cookieCloudItem.value};`;
-                        continue;
-                    }
-                    if (cookieCloudItem.name === query.name) {
-                        result = cookieCloudItem.value;
-                        break;
-                    }
+            for (const cookieCloudItem of (cookies || [])) {
+                if (cookieCloudItem.domain !== query.domain || (query.path !== undefined && cookieCloudItem.path !== query.path)) {
+                    continue;
+                }
+                if (query.name === undefined) {
+                    result = (result || '') + `${cookieCloudItem.name}=${cookieCloudItem.value};`;
+                    continue;
+                }
+                if (cookieCloudItem.name === query.name) {
+                    result = cookieCloudItem.value;
+                    break;
                 }
             }
             if (result !== undefined) {
-                newEnvs[key] = result;
+                if (_envs[key] !== result) {
+                    newEnvs[key] = result;
+                    _envs[key] = result;
+                }
                 break;
             }
         }
     }
     if (Object.keys(newEnvs).length > 0) {
+        logger.debug('[CookieCloud] start updating: ' + JSON.stringify(newEnvs));
         setConfig(newEnvs);
-        logger.info('[CookieCloud] update success.');
+        logger.info("[CookieCloud] update success: " + Object.keys(newEnvs).join(', '));
     } else {
         logger.debug('[CookieCloud] nothing to update.');
     }

@@ -4,7 +4,7 @@
 
 This repository is used to solve the problem that the cookie expiration time of some websites is too short and it is not convenient for rsshub to update the cookie.
 
-**Note: This repository does not yet contain all cookie synchronization methods. If you want to add new synchronization methods, please modify [cookiecloud/cookies.ts](/cookiecloud/cookies.ts) and create a PR.**
+**Note: This repository does not yet contain all cookie synchronization methods. If you are willing to contribute a new synchronization method, please follow the format of the JSON file in the [cookiecloud/cookies](/cookiecloud/cookies) directory, add a new JSON file and create a PR.**
 
 ### Principle
 

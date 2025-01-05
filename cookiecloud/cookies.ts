@@ -1,3 +1,6 @@
+import { directoryImport } from 'directory-import';
+import path from 'node:path';
+
 export interface CookieCloudQueryParam {
     // domain of cookie
     domain: string;
@@ -9,6 +12,15 @@ export interface CookieCloudQueryParam {
 
 export type CookieMap = Map<string, CookieCloudQueryParam[]>;
 
-export const cookieMap: CookieMap = new Map([
-    ['JAV_SESSION', [{ domain: 'javdb.com', name: '_jdb_session' }]]
-]);
+export const cookieMap: CookieMap = new Map();
+
+const cookies: Record<string, Map<string, CookieCloudQueryParam>> = directoryImport({
+    targetDirectoryPath: path.join(__dirname, './cookies'),
+    importPattern: /\.json$/,
+}) as typeof cookies;
+
+for (const cookie in cookies) {
+    for (const cookieKey in cookies[cookie]) {
+        cookieMap[cookieKey] = cookies[cookie][cookieKey];
+    }
+}
