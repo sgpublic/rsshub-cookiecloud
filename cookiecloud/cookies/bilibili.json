@@ -1,0 +1,10 @@
+{
+    "BILIBILI_COOKIE_{DedeUserID}": {
+        "sync_mod": "auto_fill",
+        "query": [
+            {
+                "domain": ".bilibili.com"
+            }
+        ]
+    }
+}

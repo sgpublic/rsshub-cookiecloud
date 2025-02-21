@@ -1,4 +1,4 @@
-import { cookieMap } from '@/routes/cookiecloud/cookies';
+import { cookieMap, getSyncMod, SyncMod } from '@/routes/cookiecloud/cookies';
 import { setConfig } from '@/config';
 import logger from '@/utils/logger';
 import CryptoJS from 'crypto-js';
@@ -55,26 +55,22 @@ const cloudCookie = async (host: string, uuid: string, password: string) => {
 
     const newEnvs = {};
     for (const key in cookieMap) {
-        const queryList = cookieMap[key];
+        const queryItem = cookieMap[key];
+        const queryList = queryItem.query;
         for (const query of queryList) {
-            let result: string | undefined;
+            const result: Map<string, string> = new Map();
             for (const cookieCloudItem of (cookies || [])) {
                 if (cookieCloudItem.domain !== query.domain || (query.path !== undefined && cookieCloudItem.path !== query.path)) {
                     continue;
                 }
-                if (query.name === undefined) {
-                    result = (result || '') + `${cookieCloudItem.name}=${cookieCloudItem.value};`;
-                    continue;
-                }
-                if (cookieCloudItem.name === query.name) {
-                    result = cookieCloudItem.value;
-                    break;
-                }
+                result[cookieCloudItem.name] = cookieCloudItem.value;
             }
-            if (result !== undefined) {
-                if (_envs[key] !== result) {
-                    newEnvs[key] = result;
-                    _envs[key] = result;
+            const syncFunc = getSyncMod(queryItem.sync_mode);
+            const { newKey, envValue } = syncFunc(key, result);
+            if (envValue !== "") {
+                if (_envs[newKey] !== envValue) {
+                    newEnvs[newKey] = envValue;
+                    _envs[newKey] = envValue;
                 }
                 break;
             }

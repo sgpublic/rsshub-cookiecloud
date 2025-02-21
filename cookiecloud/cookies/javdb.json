@@ -1,8 +1,11 @@
 {
-    "JAVDB_SESSION": [
-        {
-            "domain": "javdb.com",
-            "name": "_jdb_session"
-        }
-    ]
+    "JAVDB_SESSION": {
+        "sync_mod": "common",
+        "query": [
+            {
+                "domain": "javdb.com",
+                "name": "_jdb_session"
+            }
+        ]
+    }
 }
