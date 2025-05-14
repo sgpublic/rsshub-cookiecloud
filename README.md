@@ -6,13 +6,13 @@
 
 **注意：此仓库暂未包含所有 cookie 同步方法，您可以提交 issue 请求适配。若您愿意贡献新的同步方法，请参照 [贡献](#贡献) 添加新的 JSON 文件并创建 PR。**
 
-### 原理
+## 原理
 
 当 cookie 过期时，用户使用浏览器重新登录，然后利用 [easychen/CookieCloud](https://github.com/easychen/CookieCloud) 将 cookie 同步到 RSSHub 并更新配置。
 
 尽管这种方法仍需要用户手动重新登陆，但相比原版仅能通过修改环境变量并重启的麻烦操作，这种方法已经有所进步。
 
-### 食用方法
+## 食用方法
 
 1. 自行部署 [easychen/CookieCloud](https://github.com/easychen/CookieCloud)
 2. 将本仓库 `cookiecloud` 目录映射为 RSSHub 镜像中的 `/app/lib/routes/cookiecloud`。
@@ -55,7 +55,7 @@ services:
     restart: always
 ```
 
-### 贡献
+## 贡献
 
 当您希望贡献一个网站的同步方法，您需要在 [cookiecloud/cookies](/cookiecloud/cookies) 中添加 JSON 文件。
 

@@ -6,13 +6,13 @@ This repository is used to solve the problem that the cookie expiration time of 
 
 **Note: This repository does not yet contain all cookie synchronization methods, you can submit an issue to request adaptation. If you are willing to contribute a new synchronization method, please refer to [Contributing](#Contributing) to add new JSON files and create a PR.**
 
-### Principle
+## Principle
 
 When the cookie expires, the user logs in again with the browser, and then uses [easychen/CookieCloud](https://github.com/easychen/CookieCloud) to synchronize the cookie to RSSHub and update the configuration.
 
 Although this method still requires the user to log in again manually, it is an improvement over the original version that can only modify the environment variables and restart.
 
-### Usage method
+## Usage method
 
 1. Deploy [easychen/CookieCloud](https://github.com/easychen/CookieCloud).
 
@@ -54,7 +54,7 @@ services:
     restart: always
 ```
 
-### Contributing
+## Contributing
 
 When you wish to contribute to a site's sync method, you need to add a JSON file to [cookiecloud/cookies](/cookiecloud/cookies).
 
