@@ -59,7 +59,7 @@ const cloudCookie = async (host: string, uuid: string, password: string) => {
         for (const query of queryList) {
             let result: string | undefined;
             for (const cookieCloudItem of (cookies || [])) {
-                if (cookieCloudItem.domain !== query.domain || (query.path !== undefined && cookieCloudItem.path !== query.path)) {
+                if (!cookieCloudItem.domain.includes(query.domain) || (query.path !== undefined && cookieCloudItem.path !== query.path)) {
                     continue;
                 }
                 if (query.name === undefined) {
