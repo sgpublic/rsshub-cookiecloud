@@ -92,4 +92,4 @@ services:
   | --- | --- | --- | --- | -- |
   | domain | string | 否 | Cookie 所属域名关键词，当域名包含关键词时视为匹配成功。 | `xiaohongshu.com` |
   | name | string | 是 | Cookie 名称，当 Cookie 名称完全一致时视为匹配成功，若留空则代表获取域名下所有 Cookie。 | `_jdb_session` |
-  | path | string | 是 | Cookie 路径，当 Cookie 路径完全一致时视为匹配成功，若留空则忽略 path 匹配。 | `/` |
+  | path | string | 是 | Cookie 路径，当 Cookie 路径完全一致时视为匹配成功，若留空则忽略 path 匹配。<br/>PS：一般情况下用不到，不知道这是什么的话不写这个就行。 | `/` |

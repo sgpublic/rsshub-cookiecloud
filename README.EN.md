@@ -91,4 +91,4 @@ Example description:
 | --- | --- | --- | --- | -- |
 | domain | string | No | The keyword of the domain name to which the cookie belongs. When the domain name contains the keyword, it is considered a successful match. | `xiaohongshu.com` |
 | name | string | Yes | Cookie name. When the cookie name is exactly the same, it is considered a successful match. If it is left blank, it means obtaining all cookies under the domain name. | `_jdb_session` |
-| path | string | Yes | Cookie path. When the cookie path is exactly the same, it is considered a successful match. If it is left blank, the path match is ignored. | `/` |
+| path | string | Yes | Cookie path. When the cookie path is exactly the same, it is considered a successful match. If it is left blank, the path match is ignored.<br/>PS: It is not usually used. If you don’t know what this is, just ignore it. | `/` |
