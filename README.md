@@ -18,13 +18,13 @@
 2. 将本仓库 `cookiecloud` 目录映射为 RSSHub 镜像中的 `/app/lib/routes/cookiecloud`。
 3. 添加环境变量：
 
-   | 变量名称 | 含义 | 示例 | 默认（留空则为必填） |
-   |--|--|--|--|
-   | COOKIE_CLOUD_HOST | CookieCloud 服务器地址 | 127.0.0.1:8088 |  |
-   | COOKIE_CLOUD_UUID | 用户KEY · UUID | uuid |  |
-   | COOKIE_CLOUD_PASSWORD | 端对端加密密码 | password |  |
-   | COOKIE_CLOUD_INTERVAL | 更新间隔时间（单位：秒） | 3600 | 3600 |
-   | COOKIE_CLOUD_DEBUG | 设置为 true 时将允许路由 `/cookiecloud/:keys?` 返回配置值 | true | false |
+   | 变量名称                  | 含义                                          | 示例             | 默认（留空则为必填） |
+   |-----------------------|---------------------------------------------|----------------|------------|
+   | COOKIE_CLOUD_HOST     | CookieCloud 服务器地址                           | 127.0.0.1:8088 |            |
+   | COOKIE_CLOUD_UUID     | 用户KEY · UUID                                | uuid           |            |
+   | COOKIE_CLOUD_PASSWORD | 端对端加密密码                                     | password       |            |
+   | COOKIE_CLOUD_INTERVAL | 更新间隔时间（单位：秒）                                | 3600           | 3600       |
+   | COOKIE_CLOUD_DEBUG    | 设置为 true 时将允许路由 `/cookiecloud/:keys?` 返回配置值 | true           | false      |
 4. 修改启动命令为 `npm run dev`。
 5. 日志中出现了 `info: CookieCloud loaded.` 即为加载成功。
 
@@ -88,8 +88,8 @@ services:
 + 每个 JSON 文件内容是一个 object，key 是 RSSHub 所需的环境变量名称，value 是一个 array。
 + array 中每个 item 为一个匹配规则，将会按顺序依次匹配，直到匹配成功。每个 item 为一个 object，包含以下字段：
 
-  | 名称 | 类型 | 可选 | 含义 | 示例 |
-  | --- | --- | --- | --- | -- |
-  | domain | string | 否 | Cookie 所属域名关键词，当域名包含关键词时视为匹配成功。 | `xiaohongshu.com` |
-  | name | string | 是 | Cookie 名称，当 Cookie 名称完全一致时视为匹配成功，若留空则代表获取域名下所有 Cookie。 | `_jdb_session` |
-  | path | string | 是 | Cookie 路径，当 Cookie 路径完全一致时视为匹配成功，若留空则忽略 path 匹配。<br/>PS：一般情况下用不到，不知道这是什么的话不写这个就行。 | `/` |
+  | 名称     | 类型     | 可选 | 含义                                                                                 | 示例                |
+  |--------|--------|----|------------------------------------------------------------------------------------|-------------------|
+  | domain | string | 否  | Cookie 所属域名关键词，当域名包含关键词时视为匹配成功。                                                    | `xiaohongshu.com` |
+  | name   | string | 是  | Cookie 名称，当 Cookie 名称完全一致时视为匹配成功，若留空则代表获取域名下所有 Cookie。                             | `_jdb_session`    |
+  | path   | string | 是  | Cookie 路径，当 Cookie 路径完全一致时视为匹配成功，若留空则忽略 path 匹配。<br/>PS：大多数情况下用不到，不知道这是什么的话不写这个就行。 | `/`               |
