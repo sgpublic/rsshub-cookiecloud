@@ -40,7 +40,7 @@ services:
       - 4651:4651
     env_file: stack.env
     volumes:
-      - ./cookiecloud:/addons/cookiecloud
+      - ./cookiecloud:/app/cookiecloud
     environment:
       COOKIE_CLOUD_HOST: 'http://cookiecloud:8088'
       COOKIE_CLOUD_UUID: 'rsshub'
