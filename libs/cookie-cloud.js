@@ -33,13 +33,10 @@ const cloudCookie = async () => {
         const ret = await fetch(url);
         const json = await ret.json();
         if (json && json.encrypted) {
-            const { cookie_data } = cookieDecrypt(CookieCloudConfig.uuid, json.encrypted, CookieCloudConfig.password);
-            for (const key in cookie_data) {
-                if (!cookie_data.hasOwnProperty(key)) {
-                    continue;
-                }
+            const { cookie_data: cookieData } = cookieDecrypt(CookieCloudConfig.uuid, json.encrypted, CookieCloudConfig.password);
+            for (const key of cookieData) {
                 cookies = cookies.concat(
-                    cookie_data[key].map((item) => {
+                    cookieData[key].map((item) => {
                         if (item.sameSite === 'unspecified') {
                             item.sameSite = 'Lax';
                         }
@@ -54,30 +51,37 @@ const cloudCookie = async () => {
     }
 
     const newEnvs = {};
-    for (const key in cookieMap) {
-        const queryList = cookieMap[key];
+    for (const [key, queryList] of cookieMap) {
         for (const query of queryList) {
             let result;
-            for (const cookieCloudItem of (cookies || [])) {
-                if (!cookieCloudItem.domain.includes(query.domain) || (query.path !== undefined && cookieCloudItem.path !== query.path)) {
+            for (const cookieCloudItem of cookies) {
+                if (!cookieCloudItem.domain.includes(query.domain)) {
                     continue;
                 }
-                if (query.name === undefined) {
-                    result = (result || '') + `${cookieCloudItem.name}=${cookieCloudItem.value};`;
-                    continue;
-                }
-                if (cookieCloudItem.name === query.name) {
+                if (typeof query.name === 'string' && cookieCloudItem.name === query.name) {
                     result = cookieCloudItem.value;
                     break;
                 }
-            }
-            if (result !== undefined) {
-                if (_envs[key] !== result) {
-                    newEnvs[key] = result;
-                    _envs[key] = result;
+                if (typeof query.name === typeof Array && !(cookieCloudItem.name in query.name)) {
+                    continue;
                 }
+                if (result === undefined) {
+                    result = {};
+                }
+                result[cookieCloudItem.name] = cookieCloudItem.value;
+            }
+            if (result === undefined) {
                 break;
             }
+            if (typeof result === 'object') {
+                result = Object.entries(result).map(([k,v]) => `${k}=${v};`).join(' ');
+            }
+
+            if (_envs[key] === result) {
+                continue;
+            }
+            newEnvs[key] = result;
+            _envs[key] = result;
         }
     }
     if (Object.keys(newEnvs).length > 0) {

@@ -4,7 +4,7 @@
 
 This repository is designed to address the inconvenience of updating RSSHub cookies for websites with very short cookie expiration times.
 
-**Note: This repository does not yet include all cookie synchronization methods. You can submit an issue to request support. If you want to contribute a new synchronization method, please follow [Contributing](#contributing) to add a new JSON file and create a PR.**
+**Note: This repository does not yet include all cookie synchronization methods. You can submit an issue to request support. If you want to contribute a new synchronization method, please follow [Contributing](#contributing) to add a new JS file and create a PR.**
 
 ## How It Works
 
@@ -63,7 +63,7 @@ services:
 
 If you want to contribute a synchronization method for a website, you need to add a JS file in [cookiecloud/cookies](/libs/cookies).
 
-Here are some JSON examples:
+Here are some JS examples:
 
 * [Xiaohongshu](https://docs.rsshub.app/zh/routes/social-media#%E5%B0%8F%E7%BA%A2%E4%B9%A6)
 
@@ -98,4 +98,3 @@ Example explanation:
     |--------|--------|----------|---------------------------------------------------------------------------------------------------------------------------|-------------------|
   | domain | string | No       | Keyword of the cookie domain. Match succeeds if the domain contains this keyword.                                         | `xiaohongshu.com` |
   | name   | string | Yes      | Cookie name. Match succeeds if the cookie name exactly matches. Leave empty to get all cookies under the domain.          | `_jdb_session`    |
-  | path   | string | Yes      | Cookie path. Match succeeds if the path exactly matches. Leave empty to ignore path matching.<br/>PS: Usually not needed. | `/`               |
