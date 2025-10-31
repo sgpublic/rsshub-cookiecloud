@@ -34,7 +34,10 @@ const cloudCookie = async () => {
         const json = await ret.json();
         if (json && json.encrypted) {
             const { cookie_data: cookieData } = cookieDecrypt(CookieCloudConfig.uuid, json.encrypted, CookieCloudConfig.password);
-            for (const key of cookieData) {
+            for (const key in cookieData) {
+                if (!cookieData.hasOwnProperty(key)) {
+                    continue
+                }
                 cookies = cookies.concat(
                     cookieData[key].map((item) => {
                         if (item.sameSite === 'unspecified') {
