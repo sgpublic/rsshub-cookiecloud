@@ -22,9 +22,9 @@ for (const file of files) {
     const obj = (await import(filePath)).default;
 
     for (const [key, value] of Object.entries(obj)) {
-        if (!cookieMap[key]) {
-            cookieMap[key] = [];
+        if (!cookieMap.has(key)) {
+            cookieMap.set(key, []);
         }
-        cookieMap[key].push(...value);
+        cookieMap.get(key).push(...value);
     }
 }

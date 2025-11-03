@@ -1,8 +1,9 @@
 import { createCookieCloudSyncJob } from "./libs/cookie-cloud.js";
 import { CookieCloudConfig } from "./libs/config.js";
 import { CookieCloudDir } from "./libs/dir.js";
+import { findSetConfigFunc } from "./libs/set-config.js";
 import { route } from "./libs/route.js";
-import { findJs } from "./libs/import-js.js";
+import {readJs} from "./libs/import-js.js";
 import fs from 'node:fs';
 
 async function setupCookieCloud() {
@@ -14,12 +15,11 @@ async function setupCookieCloud() {
             return;
         }
 
-        const appBootstrapJs = await findJs(/^app-bootstrap-.*\.js$/);
-        if (!appBootstrapJs) {
+        const appBootstrapJsContent = await readJs(/^app-bootstrap-.*\.js$/);
+        if (!appBootstrapJsContent) {
             console.log('[CookieCloud] cannot find app-bootstrap-xxx.js, CookieCloud not load.');
             return;
         }
-        const appBootstrapJsContent = fs.readFileSync(appBootstrapJs, 'utf-8');
 
         let routersRegex = /case`production`:\w+=\(await import\(`\.\/routes-\w+\.js`\)\)\.default;/;
         let routersResult = appBootstrapJsContent.match(routersRegex)
@@ -29,11 +29,17 @@ async function setupCookieCloud() {
         }
         routersRegex = /routes-\w+\.js/;
         routersResult = routersResult[0].match(routersRegex);
+        console.log(`[CookieCloud] hacking ${routersResult[0]}`)
         const routes = (await import(`${CookieCloudDir}/../dist/${routersResult[0]}`)).default;
 
-        routes['cookiecloud'] = route;
+        routes.cookiecloud = route;
 
-        setTimeout(async () => await createCookieCloudSyncJob(CookieCloudConfig, false), 10);
+        if (!(await findSetConfigFunc())) {
+            console.log('[CookieCloud] cannot find config-xxx.js failed, CookieCloud not load.');
+            return;
+        }
+
+        setTimeout(async () => await createCookieCloudSyncJob(false), 10);
         console.log('[CookieCloud] CookieCloud loaded.');
     } catch (e) {
         console.log('[CookieCloud] CookieCloud load failed: ', e);

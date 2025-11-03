@@ -13,6 +13,14 @@ export async function findJs(regex, prefix) {
     return `${prefix}/${appBootstrapJs[0]}`
 }
 
+export async function readJs(regex, prefix) {
+    const js = await findJs(regex, prefix)
+    if (js === undefined) {
+        return undefined
+    }
+    return fs.readFileSync(js, 'utf-8');
+}
+
 export async function importJs(regex, prefix) {
     if (prefix === undefined) {
         prefix = path.resolve(CookieCloudDir, '../dist')

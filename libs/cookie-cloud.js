@@ -36,7 +36,7 @@ const cloudCookie = async () => {
             const { cookie_data: cookieData } = cookieDecrypt(CookieCloudConfig.uuid, json.encrypted, CookieCloudConfig.password);
             for (const key in cookieData) {
                 if (!cookieData.hasOwnProperty(key)) {
-                    continue
+                    continue;
                 }
                 cookies = cookies.concat(
                     cookieData[key].map((item) => {
