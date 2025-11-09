@@ -15,7 +15,7 @@ async function setupCookieCloud() {
             return;
         }
 
-        const appBootstrapJsContent = await readJs(/^app-bootstrap-.*\.js$/);
+        const appBootstrapJsContent = await readJs(/^app-bootstrap-.*\.mjs$/);
         if (!appBootstrapJsContent) {
             console.log('[CookieCloud] cannot find app-bootstrap-xxx.js, CookieCloud not load.');
             return;
@@ -51,4 +51,4 @@ process.env.NODE_OPTIONS='--max-http-header-size=32768';
 
 await setupCookieCloud();
 
-import (`${CookieCloudDir}/../dist/index.js`);
+import (`${CookieCloudDir}/../dist/index.mjs`);
