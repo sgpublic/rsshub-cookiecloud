@@ -3,7 +3,7 @@ import { CookieCloudConfig } from "./libs/config.js";
 import { CookieCloudDir } from "./libs/dir.js";
 import { findSetConfigFunc } from "./libs/set-config.js";
 import { route } from "./libs/route.js";
-import {readJs} from "./libs/import-js.js";
+import {distJsRegExp, readJs} from "./libs/import-js.js";
 import fs from 'node:fs';
 
 async function setupCookieCloud() {
@@ -15,19 +15,19 @@ async function setupCookieCloud() {
             return;
         }
 
-        const appBootstrapJsContent = await readJs(/^app-bootstrap-.*\.mjs$/);
+        const appBootstrapJsContent = await readJs("app-bootstrap");
         if (!appBootstrapJsContent) {
-            console.log('[CookieCloud] cannot find app-bootstrap-xxx.js, CookieCloud not load.');
+            console.log('[CookieCloud] cannot find app-bootstrap-xxx.mjs, CookieCloud not load.');
             return;
         }
 
-        let routersRegex = /case`production`:\w+=\(await import\(`\.\/routes-\w+\.js`\)\)\.default;/;
+        let routersRegex = distJsRegExp("routes", "case`production`:[A-Za-z0-9]+=\\(await import\\(`\\.\\/", "`\\)\\)\\.default;")
         let routersResult = appBootstrapJsContent.match(routersRegex)
         if (!routersResult) {
-            console.log('[CookieCloud] failed to find routes-xxx.js, CookieCloud not load.');
+            console.log('[CookieCloud] failed to find routes-xxx.mjs in app-bootstrap-xxx.mjs, CookieCloud not load.');
             return;
         }
-        routersRegex = /routes-\w+\.js/;
+        routersRegex = distJsRegExp("routes", "", "");
         routersResult = routersResult[0].match(routersRegex);
         console.log(`[CookieCloud] hacking ${routersResult[0]}`)
         const routes = (await import(`${CookieCloudDir}/../dist/${routersResult[0]}`)).default;
@@ -35,7 +35,7 @@ async function setupCookieCloud() {
         routes.cookiecloud = route;
 
         if (!(await findSetConfigFunc())) {
-            console.log('[CookieCloud] cannot find config-xxx.js failed, CookieCloud not load.');
+            console.log('[CookieCloud] cannot hacking config-xxx.mjs, CookieCloud not load.');
             return;
         }
 

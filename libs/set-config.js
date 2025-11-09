@@ -9,17 +9,17 @@ export async function findSetConfigFunc() {
         return true;
     }
 
-    const configRaw = await findJs(/config-\w+\.js/);
+    const configRaw = await findJs("config");
     if (configRaw === undefined) {
-        console.log('[CookieCloud] cannot find config-xxx.js, CookieCloud not load.')
+        console.log('[CookieCloud] cannot find config-xxx.mjs, CookieCloud not load.')
         return false;
     }
-    const configRawJs = await readJs(/config-\w+\.js/);
+    const configRawJs = await readJs("config");
     if (configRawJs === undefined) {
-        console.log('[CookieCloud] cannot read config-xxx.js, CookieCloud not load.')
+        console.log('[CookieCloud] cannot read config-xxx.mjs, CookieCloud not load.')
         return false;
     }
-    let setConfigFuncName = configRawJs.match(/\w+=\(\)/);
+    let setConfigFuncName = configRawJs.match(/[A-Za-z0-9]+=\(\)/);
     if (!setConfigFuncName) {
         console.log('[CookieCloud] cannot find setConfig function, CookieCloud not load.');
         return false;
@@ -28,7 +28,7 @@ export async function findSetConfigFunc() {
     setConfigFuncName = setConfigFuncName.substring(0, setConfigFuncName.length - 3)
     let exports = configRawJs.match(/export{(.*?)}/);
     if (!exports) {
-        console.log('[CookieCloud] cannot find exports in config-xxx.js, CookieCloud not load.');
+        console.log('[CookieCloud] cannot find exports in config-xxx.mjs, CookieCloud not load.');
         return false;
     }
     exports = exports[0];
@@ -40,7 +40,7 @@ export async function findSetConfigFunc() {
         await fs.writeFileSync(configRaw, newConfigRawJs);
     }
 
-    const configJs = await importJs(/config-\w+\.js/);
+    const configJs = await importJs("config");
     for (const [name, value] of Object.entries(configJs)) {
         if (name === 'setConfig') {
             _setConfig = value;

@@ -3,6 +3,9 @@ import path from 'node:path';
 import { CookieCloudDir } from "./dir.js";
 
 export async function findJs(regex, prefix) {
+    if (typeof regex === 'string') {
+        regex = distJsRegExp(regex)
+    }
     if (prefix === undefined) {
         prefix = path.resolve(CookieCloudDir, '../dist')
     }
@@ -22,12 +25,14 @@ export async function readJs(regex, prefix) {
 }
 
 export async function importJs(regex, prefix) {
-    if (prefix === undefined) {
-        prefix = path.resolve(CookieCloudDir, '../dist')
-    }
-    const name = await findJs(regex, prefix);
-    if (name === undefined) {
+    const js = await findJs(regex, prefix);
+    if (js === undefined) {
         return undefined;
     }
-    return await import(name);
+    return await import(js);
+}
+
+export function distJsRegExp(name, prefix="^", suffix="$") {
+    const regex = `${prefix}${name}-[A-Za-z0-9]+\\.mjs${suffix}`
+    return new RegExp(regex)
 }
