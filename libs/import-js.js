@@ -33,6 +33,6 @@ export async function importJs(regex, prefix) {
 }
 
 export function distJsRegExp(name, prefix="^", suffix="$") {
-    const regex = `${prefix}${name}-[A-Za-z0-9]+\\.mjs${suffix}`
+    const regex = `${prefix}${name}-[A-Za-z0-9_]+\\.mjs${suffix}`
     return new RegExp(regex)
 }
