@@ -15,16 +15,16 @@ async function setupCookieCloud() {
             return;
         }
 
-        const appBootstrapJsContent = await readJs("app-bootstrap");
-        if (!appBootstrapJsContent) {
-            console.log('[CookieCloud] cannot find app-bootstrap-xxx.mjs, CookieCloud not load.');
+        const indexJsContent = await readJs(/^index\.mjs$/);
+        if (!indexJsContent) {
+            console.log('[CookieCloud] cannot find index.mjs, CookieCloud not load.');
             return;
         }
 
         let routersRegex = distJsRegExp("routes", "case`production`:[A-Za-z0-9]+=\\(await import\\(`\\.\\/", "`\\)\\)\\.default;")
-        let routersResult = appBootstrapJsContent.match(routersRegex)
+        let routersResult = indexJsContent.match(routersRegex)
         if (!routersResult) {
-            console.log('[CookieCloud] failed to find routes-xxx.mjs in app-bootstrap-xxx.mjs, CookieCloud not load.');
+            console.log('[CookieCloud] failed to find routes-xxx.mjs in index.mjs, CookieCloud not load.');
             return;
         }
         routersRegex = distJsRegExp("routes", "", "");
