@@ -72,7 +72,7 @@ const cloudCookie = async () => {
             result[cookieCloudItem.name] = cookieCloudItem.value;
         }
         if (result === undefined) {
-            return null;
+            return undefined;
         }
         if (typeof result === 'object') {
             result = Object.entries(result).map(([k,v]) => `${k}=${v};`).join(' ');
@@ -84,6 +84,9 @@ const cloudCookie = async () => {
     for (const [key, queryList] of cookieMap) {
         for (const query of queryList) {
             const result = queryCookie(query);
+            if (result === undefined) {
+                break;
+            }
 
             let realKey = key;
             if (query.keyName !== undefined && typeof query.keyName === 'function') {
