@@ -53,38 +53,47 @@ const cloudCookie = async () => {
         return;
     }
 
+    const queryCookie = (query) => {
+        let result;
+        for (const cookieCloudItem of cookies) {
+            if (!cookieCloudItem.domain.includes(query.domain)) {
+                continue;
+            }
+            if (typeof query.name === 'string' && cookieCloudItem.name === query.name) {
+                result = cookieCloudItem.value;
+                break;
+            }
+            if (typeof query.name === typeof Array && !(cookieCloudItem.name in query.name)) {
+                continue;
+            }
+            if (result === undefined) {
+                result = {};
+            }
+            result[cookieCloudItem.name] = cookieCloudItem.value;
+        }
+        if (result === undefined) {
+            return null;
+        }
+        if (typeof result === 'object') {
+            result = Object.entries(result).map(([k,v]) => `${k}=${v};`).join(' ');
+        }
+        return result;
+    }
+
     const newEnvs = {};
     for (const [key, queryList] of cookieMap) {
         for (const query of queryList) {
-            let result;
-            for (const cookieCloudItem of cookies) {
-                if (!cookieCloudItem.domain.includes(query.domain)) {
-                    continue;
-                }
-                if (typeof query.name === 'string' && cookieCloudItem.name === query.name) {
-                    result = cookieCloudItem.value;
-                    break;
-                }
-                if (typeof query.name === typeof Array && !(cookieCloudItem.name in query.name)) {
-                    continue;
-                }
-                if (result === undefined) {
-                    result = {};
-                }
-                result[cookieCloudItem.name] = cookieCloudItem.value;
-            }
-            if (result === undefined) {
-                break;
-            }
-            if (typeof result === 'object') {
-                result = Object.entries(result).map(([k,v]) => `${k}=${v};`).join(' ');
-            }
+            const result = queryCookie(query);
 
-            if (_envs[key] === result) {
+            let realKey = key;
+            if (query.keyName !== undefined && typeof query.keyName === 'function') {
+                realKey = query.keyName(queryCookie);
+            }
+            if (_envs[realKey] === result) {
                 continue;
             }
-            newEnvs[key] = result;
-            _envs[key] = result;
+            newEnvs[realKey] = result;
+            _envs[realKey] = result;
         }
     }
     if (Object.keys(newEnvs).length > 0) {

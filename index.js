@@ -4,7 +4,6 @@ import { CookieCloudDir } from "./libs/dir.js";
 import { findSetConfigFunc } from "./libs/set-config.js";
 import { route } from "./libs/route.js";
 import {distJsRegExp, readJs} from "./libs/import-js.js";
-import fs from 'node:fs';
 
 async function setupCookieCloud() {
     try {
